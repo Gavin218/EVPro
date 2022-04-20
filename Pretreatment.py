@@ -48,6 +48,29 @@ def daysToDayIO(inputPath, sheetData, sheetDate, daysNum, outputPath):
     print("已成功存储到指定路径！")
     return 0
 
+# 输入为数据路径和日期路径(包含周末，季节以及新冠数据)，将合规的seq2seq写入指定路径
+def daysToDayAndOthersIO(inputPath, sheetData, sheetDate, daysNum, outputPath):
+    import pickle
+    dataset = excel_to_matrix(inputPath, sheetData)
+    date = excel_to_matrix(inputPath, sheetDate)
+    i1 = 0
+    i2 = i1 + daysNum
+    daysAndDayList = []
+    while i2 < len(date):
+        if date[i2][0] - date[i1][0] == daysNum:
+            daysList = []
+            xinGuan = []
+            for i in range(daysNum):
+                daysList += dataset[i1 + i]
+                xinGuan.append(date[i][3])
+            daysAndDayList.append([daysList, dataset[i2], xinGuan, date[i2][1], date[i2][2]])
+        i1 += 1
+        i2 += 1
+    with open(outputPath, 'wb') as f:
+        pickle.dump(daysAndDayList, f)
+    print("已成功存储到指定路径！")
+    return 0
+
 def drawPicture(arr):
     import matplotlib.pyplot as plt
     plt.plot(arr)
@@ -69,4 +92,26 @@ def drawPicturesAndSave(arr, outPath):
         plt.plot(list(range(len(one))), one)
     plt.savefig(outPath)
     plt.close()
+    return 0
+
+# 用于读取现有数据集，并根据所设阈值进行切分，所设定cut为训练集所占比例
+def cutTrainAndTestIO(input_path, cut, train_data_outputPath, test_data_outputPath):
+    import pandas as pd
+    import numpy as np
+    import pickle
+    data = pd.read_pickle(input_path)
+    newData_train = []
+    newData_test = []
+    for i in range(len(data)):
+        if np.random.rand() <= cut:
+            newData_train.append(data[i])
+        else:
+            newData_test.append(data[i])
+    with open(train_data_outputPath, 'wb') as f:
+        pickle.dump(newData_train, f)
+    with open(test_data_outputPath, 'wb') as f:
+        pickle.dump(newData_test, f)
+    print(len(newData_test))
+    print(len(newData_train))
+    print("已随机切分完毕并存储至指定路径！")
     return 0

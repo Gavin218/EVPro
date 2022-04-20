@@ -25,14 +25,16 @@ from Pretreatment import excel_to_matrix
 # t = 1
 
 from Pretreatment import daysToDayIO
+from Pretreatment import daysToDayAndOthersIO
 import pandas as pd
 
 input_path = "D:/Backup/桌面/EV/minle.xlsx"
 sheet1 = 1
-sheet2 = 3
+sheet2 = 2
 daysNum = 7
-output_path = "D:/Backup/桌面/EV/test2"
-daysToDayIO(inputPath=input_path, sheetData=sheet1, sheetDate=sheet2, daysNum=daysNum, outputPath=output_path)
+output_path = "D:/Backup/桌面/EV/dataConOthers"
+# daysToDayIO(inputPath=input_path, sheetData=sheet1, sheetDate=sheet2, daysNum=daysNum, outputPath=output_path)
+daysToDayAndOthersIO(inputPath=input_path, sheetData=sheet1, sheetDate=sheet2, daysNum=daysNum, outputPath=output_path)
 data = pd.read_pickle(output_path)
 data1 = data[2]
 print(len(data), len(data1), len(data1[0]), len(data1[1]))

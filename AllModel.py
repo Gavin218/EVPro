@@ -37,26 +37,9 @@ class EVModel1(keras.Model):
         h = self.decoder(h)
         return h
 
+
+
 # 用时序卷积构建的编码器
-class EVModel22(keras.Model):
-    def __init__(self):
-        super(EVModel22, self).__init__()
-        self.decoder = keras.Sequential([
-            keras.layers.Dense(324, activation='relu'),
-            keras.layers.Dense(768, activation='relu'),
-            keras.layers.Reshape((1, 12, 64)),
-            keras.layers.Conv2DTranspose(32, [1, 2], data_format='channels_last', strides=[1, 2], activation='relu'),
-            keras.layers.Reshape((24, 32)),
-            keras.layers.UpSampling1D(size=2),
-            keras.layers.Reshape((1, 48, 32)),
-            keras.layers.Conv2DTranspose(1, [1, 2], data_format='channels_last', strides=[1, 2], activation='relu'),
-        ])
-
-    def call(self, inputs, training=None):
-        h = self.decoder(inputs)
-        return h
-
-# 用时序卷积构建的解码器
 class EVModel21(keras.Model):
     def __init__(self):
         super(EVModel21, self).__init__()
@@ -76,4 +59,24 @@ class EVModel21(keras.Model):
 
     def call(self, inputs, training=None):
         h = self.encoder(inputs)
+        return h
+
+# 用时序卷积构建的解码器
+class EVModel22(keras.Model):
+    def __init__(self):
+        super(EVModel22, self).__init__()
+        self.decoder = keras.Sequential([
+            keras.layers.Dense(324, activation='relu'),
+            keras.layers.Dense(768, activation='relu'),
+            keras.layers.Reshape((1, 12, 64)),
+            keras.layers.Conv2DTranspose(32, [1, 2], data_format='channels_last', strides=[1, 2],
+                                         activation='relu'),
+            keras.layers.Reshape((24, 32)),
+            keras.layers.UpSampling1D(size=2),
+            keras.layers.Reshape((1, 48, 32)),
+            keras.layers.Conv2DTranspose(1, [1, 2], data_format='channels_last', strides=[1, 2], activation='relu'),
+        ])
+
+    def call(self, inputs, training=None):
+        h = self.decoder(inputs)
         return h
