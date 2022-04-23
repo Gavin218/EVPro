@@ -11,21 +11,9 @@ import pickle
 #     data.append([np.random.rand(672), np.random.rand(96)])
 
 # 单纯使用seq2seq的预测函数，输入为处理好的pd文件
-def train1(input_path, cut, train_data_outputPath, test_data_outputPath, lr, modelClass, lossOutPath, modelOutPath):
+def train1(input_path, lr, modelClass, lossOutPath, modelOutPath):
     from Pretreatment import writeToExcel
     data = pd.read_pickle(input_path)
-    newData_train = []
-    newData_test = []
-    for i in range(len(data)):
-        if np.random.rand() <= cut:
-            newData_train.append(data[i])
-        else:
-            newData_test.append(data[i])
-    data = newData_train
-    with open(train_data_outputPath, 'wb') as f:
-        pickle.dump(newData_train, f)
-    with open(test_data_outputPath, 'wb') as f:
-        pickle.dump(newData_test, f)
     record = []
     model = modelClass()
     optimizer = keras.optimizers.Adam(learning_rate=lr)

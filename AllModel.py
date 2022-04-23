@@ -80,3 +80,14 @@ class EVModel22(keras.Model):
     def call(self, inputs, training=None):
         h = self.decoder(inputs)
         return h
+
+class LSTMModel1(keras.Model):
+    def __init__(self):
+        super(LSTMModel1, self).__init__()
+        self.encoder = keras.Sequential([
+            keras.layers.LSTM(96)
+        ])
+
+    def call(self, inputs, training=None):
+        h = self.encoder(inputs)
+        return h

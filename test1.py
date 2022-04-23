@@ -4,13 +4,13 @@ import numpy as np
 
 
 # 用时序卷积构建自编码器
-class EVModel1(keras.Model):
+class EVModel3(keras.Model):
     def __init__(self):
-        super(EVModel1, self).__init__()
+        super(EVModel3, self).__init__()
         self.encoder = keras.Sequential([
-            keras.layers.Conv1D(32, 2, padding='causal', dilation_rate=1, activation='relu'),
+            keras.layers.Conv1D(32, 5, padding='causal', dilation_rate=1, activation='relu'),
             keras.layers.AveragePooling1D(pool_size=3),
-            keras.layers.Conv1D(32, 2, padding='causal', dilation_rate=2, activation='relu'),
+            keras.layers.Conv1D(32, 5, padding='causal', dilation_rate=2, activation='relu'),
             keras.layers.AveragePooling1D(pool_size=3),
             keras.layers.Conv1D(64, 2, padding='causal', dilation_rate=4, activation='relu'),
             keras.layers.AveragePooling1D(),
@@ -56,4 +56,4 @@ def testClass(CNNclass, dataSet):
 data = []
 for i in range(10):
     data.append(np.random.rand(672))
-testClass(EVModel1, data)
+testClass(EVModel3, data)

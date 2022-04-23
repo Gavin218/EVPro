@@ -19,8 +19,8 @@ def drawComparisonPic(oriData, modelPath, outputPath):
 
 
 oriData = pd.read_pickle("D:/Backup/桌面/EV/train_data")
-modelPath = "D:/Backup/桌面/EV/model2"
-outputPath = "D:/Backup/桌面/EV/train_pictures/"
+modelPath = "D:/Backup/桌面/EV/lstmModel"
+outputPath = "D:/Backup/桌面/EV/lstm_test_pictures/"
 
 drawComparisonPic(oriData=oriData, modelPath=modelPath, outputPath=outputPath)
 
