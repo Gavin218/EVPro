@@ -119,7 +119,7 @@ from Pretreatment import weatherNumToDayIO
 # weatherNumToDayIO(weatherDataPath, inputPath, sheetData, sheetDate, daysNum, outputPath)
 import pandas as pd
 x = pd.read_pickle(outputPath)
-x1 = x[2]
-x2 = x1[0]
-x3 = x1[1]
-t = 2
+# x1 = x[2]
+# x2 = x1[0]
+# x3 = x1[1]
+# t = 2

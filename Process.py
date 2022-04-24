@@ -5,11 +5,17 @@ import AllModel
 
 input_path = "D:/Backup/桌面/EV/train_data"
 lr = 0.001
-modelClass = AllModel.LSTMModel1
+modelClass = AllModel.EVModel3
 modelClass1 = AllModel.EVModel21
 modelClass2 = AllModel.EVModel22
 lossOutPath = "D:/Backup/桌面/EV/test5.xlsx"
 modelOutPath = "D:/Backup/桌面/EV/lstmModel"
+
+input_path = "D:/桌面/relatedFile/train_data_wordVet"
+lossOutPath = "D:/桌面/relatedFile/loss1.xlsx"
+modelOutPath = "D:/桌面/relatedFile/model1"
+
+
 
 
 def func1():

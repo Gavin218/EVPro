@@ -14,6 +14,7 @@ import pickle
 def train1(input_path, lr, modelClass, lossOutPath, modelOutPath):
     from Pretreatment import writeToExcel
     data = pd.read_pickle(input_path)
+    theLen = len(data[0][0])
     record = []
     model = modelClass()
     optimizer = keras.optimizers.Adam(learning_rate=lr)
@@ -21,7 +22,7 @@ def train1(input_path, lr, modelClass, lossOutPath, modelOutPath):
         for step, x in enumerate(data):
 
             x_origin = tf.constant(x[0], tf.float32)
-            x_origin = tf.reshape(x_origin, [1, 672, 1])
+            x_origin = tf.reshape(x_origin, [1, theLen, 1])
             y_real = tf.constant(x[1], tf.float32)
             y_real = tf.reshape(y_real, [1, 96, 1])
 

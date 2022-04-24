@@ -4,10 +4,11 @@ def drawComparisonPic(oriData, modelPath, outputPath):
     from Pretreatment import drawPicturesAndSave
     import tensorflow as tf
     model = tf.saved_model.load(modelPath)
+    theLen = len(oriData[0][0])
     for index in range(100):
         print(index)
         X_test = tf.cast(oriData[index][0], dtype=tf.float32)
-        X_test = tf.reshape(X_test, [1, 672, 1])
+        X_test = tf.reshape(X_test, [1, theLen, 1])
         Y_pre = model(X_test)
         Y_true = tf.cast(oriData[index][1], dtype=tf.float32)
         Y_true = tf.reshape(Y_true, [1, 96])
@@ -18,9 +19,13 @@ def drawComparisonPic(oriData, modelPath, outputPath):
     return 0
 
 
-oriData = pd.read_pickle("D:/Backup/桌面/EV/train_data")
+# oriData = pd.read_pickle("D:/Backup/桌面/EV/train_data")
 modelPath = "D:/Backup/桌面/EV/lstmModel"
 outputPath = "D:/Backup/桌面/EV/lstm_test_pictures/"
+
+oriData = pd.read_pickle("D:/桌面/relatedFile/test_data_wordVet")
+modelPath = "D:/桌面/relatedFile/model1"
+outputPath = "D:/桌面/relatedFile/word2Vec_test/"
 
 drawComparisonPic(oriData=oriData, modelPath=modelPath, outputPath=outputPath)
 
