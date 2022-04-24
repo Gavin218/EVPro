@@ -135,6 +135,7 @@ def cutTrainAndTestIO(input_path, cut, train_data_outputPath, test_data_outputPa
         pickle.dump(newData_test, f)
     print(len(newData_test))
     print(len(newData_train))
+    print(len(newData_train) / len(data))
     print("已随机切分完毕并存储至指定路径！")
     return 0
 

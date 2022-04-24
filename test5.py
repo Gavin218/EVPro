@@ -5,9 +5,9 @@ import pickle
 
 # minle = pd.read_pickle("D:/桌面/relatedFile/minleDays")
 # weather_path = "D:/桌面/relatedFile/toTrain_wordVec_weatherInformation.weatherInformation"
-new_weather_path = "D:/桌面/relatedFile/toTrainPadding_wordVec_weatherInformation"
-train_data_outputPath = "D:/桌面/relatedFile/train_data_wordVet"
-test_data_outputPath = "D:/桌面/relatedFile/test_data_wordVet"
+new_weather_path = "D:/桌面/relatedFile/two_factors_data"
+train_data_outputPath = "D:/桌面/relatedFile/train_data_twoFactors"
+test_data_outputPath = "D:/桌面/relatedFile/test_data_twoFactors"
 # cons = 42600
 # dataset = pd.read_pickle(weather_path)
 # for i in range(len(dataset)):
