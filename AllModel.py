@@ -166,3 +166,22 @@ class EVModel32(keras.Model):
     def call(self, inputs, training=None):
         h = self.decoder(inputs)
         return h
+
+# 用时序卷积构建总解码器（训练数据为之前的负荷数据以及wordVec）
+class EVModelAE(keras.Model):
+    def __init__(self):
+        super(EVModelAE, self).__init__()
+        self.decoder = keras.Sequential([
+            keras.layers.Dense(48, activation='relu'),
+            keras.layers.Dense(10, activation='relu')
+        ])
+        self.encoder = keras.Sequential([
+            keras.layers.Dense(48, activation='relu'),
+            keras.layers.Dense(96, activation='relu'),
+
+        ])
+
+    def call(self, inputs, training=None):
+        h = self.decoder(inputs)
+        h = self.encoder(h)
+        return h

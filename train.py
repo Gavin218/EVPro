@@ -119,3 +119,38 @@ def train3(input_path, lr, modelClass1, modelClass2, modelClass3, lossOutPath, m
     model1.save(modelOutPath + "model1")
     model2.save(modelOutPath + "model2")
     model3.save(modelOutPath + "model3")
+
+def AEtrain(modelClass, excelPath, lr, batchsz, epochNum, recordOutputPath, modelSavePath):
+    from Pretreatment import writeToExcel
+    from Pretreatment import excel_to_matrix
+    import time
+    dataList = excel_to_matrix(excelPath, 0)
+    length = len(dataList[0])
+    tf_data = tf.cast(dataList, dtype=tf.float32)
+    train_db = tf.data.Dataset.from_tensor_slices(tf_data)
+    train_db = train_db.shuffle(batchsz * 5).batch(batchsz)
+    model = modelClass()
+    optimizer = keras.optimizers.Adam(lr=lr)
+    record = []
+    startTime = time.time()
+    for epoch in range(epochNum):
+        for step, x in enumerate(train_db):
+            with tf.GradientTape() as tape:
+                x_rec_logits = model(x)
+                # rec_loss1 = tf.nn.sigmoid_cross_entropy_with_logits(labels=x, logits=x_rec_logits)
+                # rec_loss = tf.reduce_mean(rec_loss1)
+                orirec_loss = tf.losses.mean_squared_error(x, x_rec_logits)
+                rec_loss = tf.reduce_mean(orirec_loss)
+            grads = tape.gradient(rec_loss, model.trainable_variables)
+            optimizer.apply_gradients(zip(grads, model.trainable_variables))
+            if step % 100 == 0:
+                # 间隔性打印训练误差
+                print(epoch, step, float(rec_loss))
+                record.append([epoch, step, float(rec_loss)])
+    endTime = time.time()
+    print("训练总用时{second}秒".format(second = endTime - startTime))
+    writeToExcel(recordOutputPath, record)
+    print("误差记录已存至指定路径！")
+    model.save(modelSavePath)
+    print("模型已存至指定路径")
+    return 0

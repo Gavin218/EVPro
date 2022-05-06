@@ -100,6 +100,19 @@ def drawPicture(arr):
     plt.close()
     return 0
 
+def kMeansAndSaveLabelsIO(inputPath, k, labelPath):
+    from sklearn.cluster import KMeans
+    import pandas as pd
+    if inputPath[len(inputPath) - 4 : len(inputPath)] == 'xlsx': 
+        dataset = excel_to_matrix(inputPath, 0)
+    else:
+        dataset = pd.read_pickle(inputPath)
+    km = KMeans(n_clusters=k).fit(dataset)
+    labels = km.labels_
+    labelsList = [[one] for one in labels]
+    writeToExcel(labelPath, labelsList)
+    return 0
+
 def drawPictures(arr):
     import matplotlib.pyplot as plt
     for one in arr:
@@ -114,6 +127,154 @@ def drawPicturesAndSave(arr, outPath):
         plt.plot(list(range(len(one))), one)
     plt.savefig(outPath)
     plt.close()
+    return 0
+
+def drawPicturesAndSaveByDifferentClass(inputPath, sheet, labelPath, k, outputPath):
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    if sheet >= 0:
+        dataset = excel_to_matrix(inputPath, sheet)
+    else:
+        dataset = pd.read_pickle(inputPath)
+    labelList = excel_to_matrix(labelPath, 0)
+    clusterList = []
+    for i in range(k):
+        clusterList.append([])
+    for i in range(len(dataset)):
+        label = labelList[i][0]
+        clusterList[int(label)].append(dataset[i])
+    for i in range(k):
+        arr = clusterList[i]
+        for one in arr:
+            plt.plot(list(range(len(one))), one)
+        plt.savefig(outputPath + "class{num}".format(num=i+1))
+        plt.close()
+    return 0
+
+def drawOnePictureToShowDifferentClass(inputPath, sheet, labelPath):
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    dataset = excel_to_matrix(inputPath, sheet)
+    length = len(dataset[0])
+    labelList = excel_to_matrix(labelPath, 0)
+    colorList = ['blue', 'red', 'green', 'black', 'orange', 'brown', 'purple', 'yellow']
+    for i in range(len(dataset)):
+        plt.plot(list(range(length)), dataset[i], colorList[int(labelList[i][0])])
+    plt.show()
+    plt.close()
+    return 0
+
+
+def drawElbowPicture(dataset, k_min, k_max):
+    from sklearn.cluster import KMeans
+    import matplotlib.pyplot as plt
+    '利用SSE选择k'
+    SSE = []  # 存放每次结果的误差平方和
+    for k in range(k_min, k_max):
+        # km = KMedoids(n_clusters=k, random_state=0, metric="precomputed")
+        km = KMeans(n_clusters=k).fit(dataset)
+        SSE.append(km.inertia_)  # estimator.inertia_获取聚类准则的总和
+    X = range(k_min, k_max)
+    print(SSE)
+    plt.xlabel('k')
+    plt.ylabel('SSE')
+    plt.plot(X, SSE, 'o-')
+    plt.show()
+    return 0
+
+def drawElbowPictures(dataPath, k_min, k_max, picturesSsvePath):
+    import pandas as pd
+    from sklearn.cluster import KMeans
+    import matplotlib.pyplot as plt
+    dataset = pd.read_pickle(dataPath)
+    '利用SSE选择k'
+    SSE = []  # 存放每次结果的误差平方和
+    for k in range(k_min, k_max):
+        # km = KMedoids(n_clusters=k, random_state=0, metric="precomputed")
+        km = KMeans(n_clusters=k).fit(dataset)
+        SSE.append(km.inertia_)  # estimator.inertia_获取聚类准则的总和
+    X = range(k_min, k_max)
+    print(SSE)
+    plt.xlabel('k')
+    plt.ylabel('SSE')
+    plt.plot(X, SSE, 'o-')
+    plt.show()
+    return 0
+
+# 读取为dataframe格式，输出仍为dataframe格式
+def clusterDatasetByLabel(inputPath, labelPath, labelSheet, datePath, dateSheet, k, outputPath):
+    import pandas as pd
+    import datetime
+    import pickle
+    dataset = pd.read_pickle(inputPath)
+    labelList = excel_to_matrix(labelPath, labelSheet)
+    dateList = excel_to_matrix(datePath, dateSheet)
+    datasetAfterClustering = []   # 该数组用于存放分类好的dataset
+    setList = []    # 该列表用于存放不同类别中的日期
+    for i in range(k):
+        datasetAfterClustering.append([])
+        setList.append(set())
+    # 用于将日期放入对应set中
+    for i in range(len(labelList)):
+        label = int(labelList[i][0])
+        setList[label].add(dateList[i][0])
+    # 将数据放入对应列表中
+    originDay = datetime.date(year=1899, month=12, day=30)
+    for i in range(len(dataset)):
+        data = dataset[i]
+        date = data[0].date()
+        dateNum = (date - originDay).days
+        for j in range(len(setList)):
+            oneSet = setList[j]
+            if dateNum in oneSet:
+                datasetAfterClustering[j].append(data)
+                break
+    with open(outputPath, 'wb') as f:
+        pickle.dump(datasetAfterClustering, f)
+    return 0
+
+def onlyKeepMinutes(inputPath, outputPath):
+    import pandas as pd
+    import pickle
+    dataset = pd.read_pickle(inputPath)
+    k = len(dataset)
+    newDataset = []
+    for i in range(k):
+        newDataset.append([])
+    for i in range(k):
+        oneClassData = dataset[i]
+        for j in range(len(oneClassData)):
+            data = oneClassData[j]
+            newDataset[i].append([data[0].time().minute + data[0].time().hour * 60, data[1]])
+    with open(outputPath, 'wb') as f:
+        pickle.dump(newDataset, f)
+    return 0
+
+
+# 若所读取源文件中不存在多组数据，则取sheet = -1
+def kMeansTSENPlot(filePath, sheet, clusterNum):
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    from sklearn.cluster import KMeans
+    from sklearn.manifold import TSNE
+    colorList = ['blue', 'yellow', 'red', 'green', 'black', 'orange', 'brown', 'purple']
+    if sheet == -1:
+        dataset = pd.read_pickle(filePath)
+    else:
+        dataset = pd.read_pickle(filePath)[sheet]
+    km = KMeans(n_clusters=clusterNum).fit(dataset)
+    kmResult = km.labels_
+    tsne = TSNE(n_components=2)
+    embeddedData = tsne.fit_transform(dataset)
+    for i in range(clusterNum):
+        rowIndex, colIndex = [], []
+        for j in range(len(kmResult)):
+            print(j)
+            if kmResult[j] == i:
+                rowIndex.append(embeddedData[j][0])
+                colIndex.append(embeddedData[j][1])
+        plt.scatter(rowIndex, colIndex, s=1, c=colorList[i])
+    plt.show()
     return 0
 
 # 用于读取现有数据集，并根据所设阈值进行切分，所设定cut为训练集所占比例
