@@ -15,8 +15,8 @@ def dimReduction(dataPath, sheet, modelPath, lowDataSavePath):
     return 0
 
 
-dataPath = "D:/Backup/桌面/EVC/loadData.xlsx"
+dataPath = "D:/Backup/桌面/EVK/hf/loadData.xlsx"
 sheet = 0
-modelPath = "D:/Backup/桌面/EVC/AEmodel"
-lowPath = "D:/Backup/桌面/EVC/lowDemData"
+modelPath = "D:/Backup/桌面/EVK/hf/AEmodel"
+lowPath = "D:/Backup/桌面/EVK/hf/lowDemData"
 dimReduction(dataPath, sheet, modelPath, lowPath)

@@ -185,3 +185,21 @@ class EVModelAE(keras.Model):
         h = self.decoder(inputs)
         h = self.encoder(h)
         return h
+
+class EVModelAE2(keras.Model):
+    def __init__(self):
+        super(EVModelAE2, self).__init__()
+        self.decoder = keras.Sequential([
+            keras.layers.Dense(48, activation='relu'),
+            keras.layers.Dense(5, activation='relu')
+        ])
+        self.encoder = keras.Sequential([
+            keras.layers.Dense(48, activation='relu'),
+            keras.layers.Dense(96, activation='relu'),
+
+        ])
+
+    def call(self, inputs, training=None):
+        h = self.decoder(inputs)
+        h = self.encoder(h)
+        return h

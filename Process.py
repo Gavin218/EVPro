@@ -7,7 +7,7 @@ import AllModel
 
 input_path = "D:/Backup/桌面/EV/train_data"
 lr = 0.001
-modelClass = AllModel.EVModelAE
+modelClass = AllModel.EVModelAE2
 modelClass1 = AllModel.EVModel21
 modelClass2 = AllModel.EVModel31
 modelClass3 = AllModel.EVModel32
@@ -18,11 +18,11 @@ input_path = "D:/桌面/relatedFile/train_data_twoFactors"
 lossOutPath = "D:/桌面/relatedFile/loss2.xlsx"
 modelOutPath = "D:/桌面/relatedFile/two_factors_model/"
 
-excelPath = "D:/Backup/桌面/EVC/loadData.xlsx"
+excelPath = "D:/Backup/桌面/EVK/hf/loadData.xlsx"
 batchsz = 128
 epochNum = 100
-recordOutputPath = "D:/Backup/桌面/EVC/lossRecord.xlsx"
-modelSavePath = "D:/Backup/桌面/EVC/AEmodel"
+recordOutputPath = "D:/Backup/桌面/EVK/hf/lossRecord.xlsx"
+modelSavePath = "D:/Backup/桌面/EVK/hf/AEmodel"
 
 
 def func1():
